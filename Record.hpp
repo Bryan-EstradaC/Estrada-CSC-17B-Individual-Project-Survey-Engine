@@ -3,7 +3,6 @@
 #include "User.hpp"
 #include "Response.hpp"
 #include "Survey.hpp"
-#include <list>
 #include <fstream>
 
 class Record {

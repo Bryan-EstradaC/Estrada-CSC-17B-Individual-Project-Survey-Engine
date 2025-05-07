@@ -6,15 +6,19 @@
 
 class Survey {
     private:
-        string title;
-        vector<Question> questions;
+        string title;               //Title of the survey.
+        vector<Question> questions; //Contains the questions of a survey.
     
     public:
-        Survey(string);    
-        void addQuestion(Question);    
-        void display() const;    
+        //Constructor 
+        Survey(string);      
+        
+        //Getters
         Question getQuestion(int) const;    
         vector<Question> getAllQuestions() const;    
         string getTitle() const;
+
+        void addQuestion(Question);    
+        void display() const; 
 };
 #endif

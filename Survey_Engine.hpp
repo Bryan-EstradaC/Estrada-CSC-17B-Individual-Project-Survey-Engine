@@ -10,13 +10,15 @@
 
 class Survey_Engine {
     private:
-        vector<Survey> surveys;
-        vector<Response> responses;
-        vector<User> users;
-        User* currentUser = nullptr;
+        vector<Survey> surveys;         //Contains the surveys created by the admin
+        vector<Response> responses;     //Contains the responses of the user by specific users
+        vector<User> users;             //Contains users registered in the program
+        User* currentUser = nullptr;    //Points to the user using in the program
     
     public:
+        //Constructor
         Survey_Engine();
+        
         void loginUser();
         void saveData();
         void createSurvey();    

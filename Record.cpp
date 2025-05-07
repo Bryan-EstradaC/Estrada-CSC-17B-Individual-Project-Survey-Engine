@@ -1,5 +1,10 @@
 #include "Record.hpp"
 
+/**
+ * @brief Saves a list of users to a binary file.
+ * @param users A vector of User objects to save.
+ * @param filename The name of the binary file to write to.
+ */
 void Record::saveUsers(const vector<User>& users, const string& filename) {
     ofstream out(filename, ios::binary);
     int count = users.size();
@@ -9,6 +14,10 @@ void Record::saveUsers(const vector<User>& users, const string& filename) {
     out.close(); 
 }
 
+/**
+ * @brief Loads users from a binary file.
+ * @param filename The name of the binary file to read from.
+ */
 vector<User> Record::loadUsers(const string& filename) {
     vector<User> users;
     ifstream in(filename, ios::binary);
@@ -25,6 +34,11 @@ vector<User> Record::loadUsers(const string& filename) {
     return users;
 }
 
+/**
+ * @brief Saves a list of surveys and their questions/choices to a binary file.
+ * @param surveys A vector of Survey objects to save.
+ * @param filename The name of the binary file to write to.
+ */
 void Record::saveSurveys(const vector<Survey>& surveys, const string& filename) {
     ofstream out(filename, ios::binary);
     int count = surveys.size();
@@ -57,6 +71,10 @@ void Record::saveSurveys(const vector<Survey>& surveys, const string& filename) 
     out.close();
 }
 
+/**
+ * @brief Loads surveys and their questions/choices from a binary file.
+ * @param filename The name of the binary file to read from.
+ */
 vector<Survey> Record::loadSurveys(const string& filename) {
     vector<Survey> surveys;
     ifstream in(filename, ios::binary);
@@ -100,6 +118,11 @@ vector<Survey> Record::loadSurveys(const string& filename) {
     return surveys;
 }
 
+/**
+ * @brief Saves a list of responses to a binary file.
+ * @param responses A vector of Response objects to save.
+ * @param filename The name of the binary file to write to.
+ */
 void Record::saveResponses(const vector<Response>& responses, const string& filename) {
     ofstream out(filename, ios::binary);
     int count = responses.size();
@@ -125,6 +148,10 @@ void Record::saveResponses(const vector<Response>& responses, const string& file
     out.close();
 }
 
+/**
+ * @brief Loads responses from a binary file.
+ * @param filename The name of the binary file to read from.
+ */
 vector<Response> Record::loadResponses(const string& filename) {
     vector<Response> responses;
     ifstream in(filename, ios::binary);

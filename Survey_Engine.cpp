@@ -2,14 +2,21 @@
 #include <iostream>
 using namespace std;
 
+/**
+ * @brief Constructs a Survey_Engine and loads users, surveys, and responses from binary files.
+ */
 Survey_Engine::Survey_Engine(){
     users = Record::loadUsers("users.dat");
     surveys = Record::loadSurveys("surveys.dat");
     responses = Record::loadResponses("responses.dat");
 }
 
+/**
+ * @brief Logs in an existing user or creates a new one.
+ */
 void Survey_Engine::loginUser(){
     string username;
+    cout << "=== Log in or sign up ===" << endl;
     cout << "Enter username: ";
     cin >> username;
     //getline(cin, username);
@@ -42,17 +49,23 @@ void Survey_Engine::loginUser(){
     }
 }
 
+/**
+ * @brief Saves all current users, surveys, and responses to binary files.
+ */
 void Survey_Engine::saveData(){
     Record::saveUsers(users, "users.dat");
     Record::saveResponses(responses, "responses.dat");
     Record::saveSurveys(surveys, "surveys.dat");
 }
 
+/**
+ * @brief Allows an admin to create a new survey.
+ */
 void Survey_Engine::createSurvey() {
-    if(!currentUser || !currentUser->getIsAdmin()){
-        cout << "Only admins can create surveys." << endl;
-        return;
-    }
+    // if(!currentUser || !currentUser->getIsAdmin()){
+    //     cout << "Only admins can create surveys." << endl;
+    //     return;
+    // }
 
     string title;
     cout << "\nEnter title of the survey: ";
@@ -98,6 +111,9 @@ void Survey_Engine::createSurvey() {
     cout << "\nSurvey created successfully!" << endl;
 }
 
+/**
+ * @brief Allows the current user to take a selected survey.
+ */
 void Survey_Engine::takeSurvey() {
     if (surveys.empty()) {
         cout << "\nNo surveys available.\n";
@@ -127,8 +143,9 @@ void Survey_Engine::takeSurvey() {
     Response userResponse(currentUser->getUsername(), choice - 1);
 
     vector<Question> questions = selectedSurvey.getAllQuestions();
+    cout << "=== " << selectedSurvey.getTitle() << " ===" << endl;
     for (int i = 0; i < questions.size(); i++) {
-        cout << "\nQuestion " << i + 1 << ":\n";
+        cout << i + 1 << ": ";
         questions[i].display();
 
         string answer;
@@ -141,6 +158,9 @@ void Survey_Engine::takeSurvey() {
     cout << "\nSurvey completed!" << endl;
 }
 
+/**
+ * @brief Displays recorded responses to a selected survey.
+ */
 void Survey_Engine::viewResults() const {
     if (surveys.empty()) {
         cout << "\nNo surveys available.\n";
@@ -148,7 +168,7 @@ void Survey_Engine::viewResults() const {
     }
 
     // Step 1: List all surveys
-    cout << "\nAvailable Surveys:\n";
+    cout << "\n=== Available Surveys ===\n";
     for (int i = 0; i < surveys.size(); i++) {
         cout << i + 1 << ". " << surveys[i].getTitle() << endl;
     }
@@ -168,7 +188,7 @@ void Survey_Engine::viewResults() const {
     const Survey& selectedSurvey = surveys[selectedSurveyIndex];
 
     // Step 3: Collect users who responded to this survey
-    list<const Response*> matchedResponses;
+    vector<const Response*> matchedResponses;
     for (const auto& r : responses) {
         if (r.getSurveyIndex() == selectedSurveyIndex) {
             matchedResponses.push_back(&r);
@@ -197,6 +217,7 @@ void Survey_Engine::viewResults() const {
     cin.ignore();
 
     if (responseMap.find(userChoice) != responseMap.end()) {
+        cout << "\n==== "<< selectedSurvey.getTitle() << " ====";
         cout << "\n--- Response Details ---\n";
         responseMap[userChoice]->display(selectedSurvey);
     } else {
@@ -204,16 +225,20 @@ void Survey_Engine::viewResults() const {
     }
 }
 
+/**
+ * @brief Starts the survey engine menu loop.
+ */
 void Survey_Engine::start(){
     loginUser();
     int choice;
     if(currentUser->getIsAdmin() == true){
         do{
-            cout << "==== Survey Engine ====" << endl;
+            cout << "\n===== SURVEY ENGINE =====" << endl;
             cout << "1. Create Survey" << endl;
             cout << "2. Take Survey" << endl;
             cout << "3. View Results" << endl;
             cout << "4. Exit" << endl;
+            cout << "Enter your choice: ";
             cin >> choice;
 
             switch(choice){
