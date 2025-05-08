@@ -23,7 +23,7 @@ void Question::addChoice(string choice) {
 }
 
 /**
-* @brief Displays the question
+* @brief Displays the question with its choices
 */
 void Question::display() const {
         cout << text << endl;
@@ -42,7 +42,7 @@ bool Question::getIsMultipleChoice() const {
 }
 
 /**
-* @brief Returns the vector of choices
+* @brief Returns the vector of question's choices
 */  
 vector<string> Question::getChoices() const {
     return choices;

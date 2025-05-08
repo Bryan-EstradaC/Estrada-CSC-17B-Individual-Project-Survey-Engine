@@ -37,22 +37,22 @@ void Response::recordAnswer(int questionIndex, string answer) {
 
 /**
 * @brief Displays the answers of an a specific survey by an specific user.
-* @param survey An Survey object to get the questions from an specific survey.
+* @param survey A Survey object to get the questions from an specific survey.
 */
 void Response::display(const Survey& survey) const {
     cout << "User: " << userName << "\n\n";
     for (const auto& pair : answers) {
-        int questionIndex = pair.first;
-        string userInput = pair.second;
+        int questionIndex = pair.first; //First map's key
+        string userInput = pair.second; //Second map's key
 
-        Question q = survey.getQuestion(questionIndex);
+        Question q = survey.getQuestion(questionIndex); //Get each question of the survey
         cout << "Q" << questionIndex + 1 << ": " << q.getText() << "\n";
 
         if (q.getIsMultipleChoice()) {
             int selected = stoi(userInput); // Convert string to int
-            cout << "Answer: " << q.getChoiceText(selected) << "\n";
+            cout << "Answer: " << q.getChoiceText(selected) << "\n";    //Get the user's selected choice
         } else {
-            cout << "Answer: " << userInput << "\n";
+            cout << "Answer: " << userInput << "\n";    //Get user's response
         }
     }
     cout << "=================" << endl;

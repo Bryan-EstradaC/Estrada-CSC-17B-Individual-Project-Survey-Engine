@@ -19,6 +19,6 @@ class Survey {
         string getTitle() const;
 
         void addQuestion(Question);    
-        void display() const; 
+        void display() const;
 };
 #endif

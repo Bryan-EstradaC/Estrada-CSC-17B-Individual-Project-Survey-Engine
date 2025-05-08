@@ -72,7 +72,7 @@ void Record::saveSurveys(const vector<Survey>& surveys, const string& filename) 
 }
 
 /**
- * @brief Loads surveys and their questions/choices from a binary file.
+ * @brief Loads surveys and their questions and choices from a binary file.
  * @param filename The name of the binary file to read from.
  */
 vector<Survey> Record::loadSurveys(const string& filename) {

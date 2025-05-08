@@ -33,21 +33,10 @@ bool User::getIsAdmin() const {
 
 /**
 * @brief Sets whether a user is admin or not.
+* @param admin Bool variable that will set member variable to true or false.
 */
 void User::setAdmin(bool admin) { 
     isAdmin = admin; 
-}
-
-/**
-* @brief Adds a survey taken by a user to a vector of takenSurveys.
-* @param index Index of the container
-*/
-void User::addTakenSurvey(int index) { 
-    takenSurveys.push_back(index); 
-}
-
-vector<int> User::getTakenSurveys() const { 
-    return takenSurveys; 
 }
 
 /**

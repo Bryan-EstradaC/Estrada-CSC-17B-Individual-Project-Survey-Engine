@@ -19,13 +19,10 @@ class User {
 
         //Getters
         string getUsername() const;
-        bool getIsAdmin() const;
-        vector<int> getTakenSurveys() const;   
+        bool getIsAdmin() const;  
 
         //Setter
-        void setAdmin(bool);    
-
-        void addTakenSurvey(int);    
+        void setAdmin(bool); 
          
         //Binary files handlers
         void userToFile(ofstream&) const;    
