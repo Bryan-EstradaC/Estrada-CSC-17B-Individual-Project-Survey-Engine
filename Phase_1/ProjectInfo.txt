@@ -1,0 +1,8 @@
+Project name: Engine Survey
+Programmer: Bryan Estrada
+Class: CSC-17B
+# Lines of Code: 909
+Time Spent: 20 hours
+GitHub link: https://github.com/Bryan-EstradaC/Estrada-CSC-17B-Individual-Project-Survey-Engine
+
+Note: I added draw.io files for flowchart and UML diagram under docs, but there are pictures of them in the writing report (word file).
