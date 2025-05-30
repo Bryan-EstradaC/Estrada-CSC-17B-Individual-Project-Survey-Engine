@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Survey</title>
+</head>
+<body>
+  <h2>Create a New Survey</h2>
+
+  <form id="surveyForm">
+    <label for="title">Survey Title:</label><br>
+    <input type="text" id="title" name="title" required><br><br>
+
+    <div id="questionsContainer">
+      <h3>Questions:</h3>
+    </div>
+
+    <button type="button" onclick="addQuestion()">Add Question</button><br><br>
+    <button type="submit">Create Survey</button>
+  </form>
+
+  <div id="response" style="margin-top:20px;"></div>
+
+  <script>
+    let questionCount = 0;
+
+    function addQuestion() {
+      const container = document.getElementById("questionsContainer");
+
+      const div = document.createElement("div");
+      div.innerHTML = `
+        <label>Question Text:</label><br>
+        <input type="text" name="questions[${questionCount}][text]" required><br>
+        <label>Is Multiple Choice?</label>
+        <select name="questions[${questionCount}][isMultipleChoice]">
+          <option value="0">No</option>
+          <option value="1">Yes</option>
+        </select><br><br>
+      `;
+      container.appendChild(div);
+      questionCount++;
+    }
+
+    document.getElementById("surveyForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const form = e.target;
+      const formData = new FormData(form);
+
+      fetch("create_survey.php", {
+        method: "POST",
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        const responseDiv = document.getElementById("response");
+        if (data.status === "success") {
+          responseDiv.textContent = "Survey created successfully!";
+          responseDiv.style.color = "green";
+          form.reset();
+          document.getElementById("questionsContainer").innerHTML = "<h3>Questions:</h3>";
+          questionCount = 0;
+        } else {
+          responseDiv.textContent = "Error: " + data.message;
+          responseDiv.style.color = "red";
+        }
+      })
+      .catch(err => {
+        document.getElementById("response").textContent = "Request failed: " + err;
+      });
+    });
+  </script>
+</body>
+</html>
