@@ -25,20 +25,50 @@
     let questionCount = 0;
 
     function addQuestion() {
-      const container = document.getElementById("questionsContainer");
+        const container = document.getElementById("questionsContainer");
 
-      const div = document.createElement("div");
-      div.innerHTML = `
-        <label>Question Text:</label><br>
-        <input type="text" name="questions[${questionCount}][text]" required><br>
-        <label>Is Multiple Choice?</label>
-        <select name="questions[${questionCount}][isMultipleChoice]">
-          <option value="0">No</option>
-          <option value="1">Yes</option>
-        </select><br><br>
-      `;
-      container.appendChild(div);
-      questionCount++;
+        const div = document.createElement("div");
+        div.classList.add("question-block");
+
+        div.innerHTML = `
+            <label>Question Text:</label><br>
+            <input type="text" name="questions[${questionCount}][text]" required><br>
+
+            <label>Is Multiple Choice?</label>
+            <select name="questions[${questionCount}][isMultipleChoice]" onchange="toggleChoices(this, ${questionCount})">
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+            </select><br>
+
+            <div class="choices" id="choices-${questionCount}" style="display: none;">
+            <label>Choices:</label><br>
+            <input type="text" name="questions[${questionCount}][choices][]" placeholder="Choice 1"><br>
+            <input type="text" name="questions[${questionCount}][choices][]" placeholder="Choice 2"><br>
+            <button type="button" onclick="addChoice(${questionCount})">Add Another Choice</button><br>
+            </div><br>
+        `;
+
+        container.appendChild(div);
+        questionCount++;
+    }
+
+    function toggleChoices(selectEl, index) {
+        const choiceDiv = document.getElementById(`choices-${index}`);
+        if (selectEl.value === "1") {
+            choiceDiv.style.display = "block";
+        } else {
+            choiceDiv.style.display = "none";
+        }
+    }
+
+    function addChoice(index) {
+        const container = document.getElementById(`choices-${index}`);
+        const input = document.createElement("input");
+        input.type = "text";
+        input.name = `questions[${index}][choices][]`;
+        input.placeholder = "Another Choice";
+        container.insertBefore(input, container.lastElementChild);
+        container.insertBefore(document.createElement("br"), container.lastElementChild);
     }
 
     document.getElementById("surveyForm").addEventListener("submit", function(e) {
