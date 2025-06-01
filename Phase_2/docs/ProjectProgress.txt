@@ -1,0 +1,14 @@
+Project name: Engine Survey
+Programmer: Bryan Estrada
+Class: CSC-17B
+# Lines of Code: 310
+Time Spent: 6 hours
+GitHub link: https://github.com/Bryan-EstradaC/Estrada-CSC-17B-Individual-Project-Survey-Engine
+
+Task accomplished:
+- Built database
+- Tested connectivity with database
+- Created register/login form
+- Write users to database from the form
+- Created create_survey form
+- Write survey to database from the form
