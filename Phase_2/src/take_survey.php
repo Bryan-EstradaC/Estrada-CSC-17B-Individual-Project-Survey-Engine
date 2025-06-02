@@ -1,43 +1,34 @@
 <?php
 require_once("connect.php");
 
-$surveyId = $_GET['survey_id'];
+if (!isset($_GET['survey_id'])) {
+    echo "Survey not selected.";
+    exit;
+}
 
-$sql = "SELECT s.Title AS surveyTitle, q.QuestionID, q.Text AS questionText, q.isMultipleChoice,
-               c.ChoiceID, c.Text AS choiceText
-        FROM survey s
-        JOIN question q ON s.SurveyID = q.SurveyID
-        LEFT JOIN choice c ON q.QuestionID = c.QuestionID
-        WHERE s.SurveyID = ?";
-        
-$stmt = $connection->prepare($sql);
-$stmt->bind_param("i", $surveyId);
-$stmt->execute();
-$result = $stmt->get_result();
+$surveyID = intval($_GET['survey_id']);
+$surveyTitle = $connection->query("SELECT Title FROM survey WHERE SurveyID = $surveyID")->fetch_assoc()['Title'];
 
-$survey = [];
-while ($row = $result->fetch_assoc()) {
-    $qId = $row['QuestionID'];
+echo "<h2>Survey: $surveyTitle</h2>";
+echo "<form method='POST' action='submit_response.php'>";
 
-    if (!isset($survey['title'])) {
-        $survey['title'] = $row['surveyTitle'];
-    }
+$questions = $connection->query("SELECT * FROM question WHERE SurveyID = $surveyID");
 
-    if (!isset($survey['questions'][$qId])) {
-        $survey['questions'][$qId] = [
-            "text" => $row['questionText'],
-            "isMultipleChoice" => $row['isMultipleChoice'],
-            "choices" => []
-        ];
-    }
+while ($q = $questions->fetch_assoc()) {
+    echo "<p><strong>{$q['Text']}</strong></p>";
+    $qid = $q['QuestionID'];
 
-    if ($row['choiceText']) {
-        $survey['questions'][$qId]['choices'][] = [
-            "choiceID" => $row['ChoiceID'],
-            "text" => $row['choiceText']
-        ];
+    if ($q['isMultipleChoice']) {
+        $choices = $connection->query("SELECT * FROM choice WHERE QuestionID = $qid");
+        while ($c = $choices->fetch_assoc()) {
+            echo "<label><input type='radio' name='answers[$qid]' value='{$c['Text']}' required> {$c['Text']}</label><br>";
+        }
+    } else {
+        echo "<input type='text' name='answers[$qid]' required><br>";
     }
 }
 
-echo json_encode($survey);
+echo "<input type='hidden' name='survey_id' value='$surveyID'>";
+echo "<br><input type='submit' value='Submit Survey'>";
+echo "</form>";
 ?>

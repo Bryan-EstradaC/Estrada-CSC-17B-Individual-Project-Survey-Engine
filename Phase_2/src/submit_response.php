@@ -1,26 +1,34 @@
 <?php
+session_start();
 require_once("connect.php");
 
-$userId = $_POST['UserID'];
+// Use logged-in UserID
+if (!isset($_SESSION['UserID'])) {
+    echo "You must be logged in to take a survey.";
+    exit;
+}
+$userID = $_SESSION['UserID'];
+
+if (!isset($_POST['survey_id']) || !isset($_POST['answers'])) {
+    echo "Invalid submission.";
+    exit;
+}
+
+$surveyID = intval($_POST['survey_id']);
 $answers = $_POST['answers'];
 
-// Get any one question to get the survey ID
-$firstQId = array_key_first($answers);
-$qInfo = $connection->query("SELECT SurveyID FROM question WHERE QuestionID = $firstQId")->fetch_assoc();
-$surveyId = $qInfo['SurveyID'];
-
-// Insert into `response`
+// Insert response
 $stmt = $connection->prepare("INSERT INTO response (UserID, SurveyID) VALUES (?, ?)");
-$stmt->bind_param("ii", $userId, $surveyId);
+$stmt->bind_param("ii", $userID, $surveyID);
 $stmt->execute();
-$responseId = $stmt->insert_id;
+$responseID = $stmt->insert_id;
 
-// Insert answers
+// Insert each answer
 $stmt = $connection->prepare("INSERT INTO answer (ResponseID, QuestionID, Text) VALUES (?, ?, ?)");
-foreach ($answers as $questionId => $text) {
-    $stmt->bind_param("iis", $responseId, $questionId, $text);
+foreach ($answers as $questionID => $text) {
+    $stmt->bind_param("iis", $responseID, $questionID, $text);
     $stmt->execute();
 }
 
-echo json_encode(["status" => "success"]);
+echo "<p>Thank you! Your response was recorded.</p>";
 ?>

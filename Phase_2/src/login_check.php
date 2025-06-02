@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once("connect.php");
 
 // Validate POST input
@@ -19,6 +20,11 @@ $result = $stmt->get_result();
 
 if ($result->num_rows === 1) {
     $user = $result->fetch_assoc();
+
+    $_SESSION['UserID'] = $user['UserID'];
+    $_SESSION['Name'] = $user['Name'];
+    $_SESSION['isAdmin'] = $user['isAdmin'];
+
     echo json_encode([
         "status" => "success",
         "message" => "Login successful",
