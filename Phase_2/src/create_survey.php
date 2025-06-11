@@ -1,57 +1,44 @@
 <?php
-require_once("connect.php");
-
-if (!isset($_POST['title']) || !isset($_POST['questions'])) {
-    echo json_encode(["status" => "error", "message" => "Missing survey title or questions"]);
-    exit;
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 
-$title = $_POST['title'];
-$questions = $_POST['questions'];
-
-// Insert survey title
-$sql = "INSERT INTO survey (Title) VALUES (?)";
-$stmt = $connection->prepare($sql);
-$stmt->bind_param("s", $title);
-
-if (!$stmt->execute()) {
-    echo json_encode(["status" => "error", "message" => $stmt->error]);
-    exit;
+if (!isset($_SESSION['isAdmin']) || !$_SESSION['isAdmin']) {
+    die("Access denied. Admins only.");
 }
-
-$surveyId = $stmt->insert_id; // Get newly inserted survey ID
-
-// Insert each question
-$questionSql = "INSERT INTO question (Text, isMultipleChoice, SurveyID) VALUES (?, ?, ?)";
-$questionStmt = $connection->prepare($questionSql);
-
-$choiceSql = "INSERT INTO choice (Text, QuestionID) VALUES (?, ?)";
-$choiceStmt = $connection->prepare($choiceSql);
-
-foreach ($questions as $q) {
-    $text = $q['text'];
-    $isMultipleChoice = $q['isMultipleChoice'];
-
-    $questionStmt->bind_param("sii", $text, $isMultipleChoice, $surveyId);
-    if (!$questionStmt->execute()) {
-        echo json_encode(["status" => "error", "message" => $questionStmt->error]);
-        exit;
-    }
-
-    $questionId = $questionStmt->insert_id;
-
-    // If multiple choice, insert choices
-    if ($isMultipleChoice && isset($q['choices']) && is_array($q['choices'])) {
-        foreach ($q['choices'] as $choiceText) {
-            $choiceStmt->bind_param("si", $choiceText, $questionId);
-            if (!$choiceStmt->execute()) {
-                echo json_encode(["status" => "error", "message" => $choiceStmt->error]);
-                exit;
-            }
-        }
-    }
-}
-
-
-echo json_encode(["status" => "success"]);
 ?>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Create Survey</title>
+  <style>
+    .question-block { border: 1px solid #ccc; padding: 1em; margin-bottom: 1em; }
+    .choice-input { display: block; margin-top: 0.5em; }
+  </style>
+</head>
+<body>
+  <h2>Create a New Survey</h2>
+  <form id="createForm">
+    <label>Survey Title:</label><br>
+    <input type="text" id="surveyTitleInput" required><br><br>
+
+    <div id="questionContainer"></div>
+
+    <button type="button" id="addQuestion">➕ Add Question</button><br><br>
+    <!-- <textarea id="preview" rows="10" cols="60" readonly></textarea><br><br> -->
+
+    <button type="submit">Submit Survey</button>
+  </form>
+
+  <script src="SurveyModel.js"></script>
+  <script src="SurveyView.js"></script>
+  <script src="SurveyController.js"></script>
+  <script>
+    const model = new SurveyModel();
+    const view = new SurveyView(model);
+    const controller = new SurveyController(model, view);
+    controller.init();
+  </script>
+</body>
+</html>

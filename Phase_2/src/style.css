@@ -1,0 +1,33 @@
+body {
+    background-image: url('images/bars.jpg'); /* ✅ Path to your image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    }
+    header {
+      background: #001eff;
+      color: white;
+      padding: 1rem;
+    }
+    nav {
+      background: #f4f4f4;
+      padding: 1rem;
+    }
+    nav a {
+      margin-right: 1rem;
+      text-decoration: none;
+      color: #007BFF;
+    }
+    main {
+      padding: 2rem;
+    }
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    li {
+      margin: 1rem 0;
+    }

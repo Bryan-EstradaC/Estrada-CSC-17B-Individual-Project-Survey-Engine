@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once("connect.php");
 
 // Use logged-in UserID
@@ -30,5 +32,7 @@ foreach ($answers as $questionID => $text) {
     $stmt->execute();
 }
 
-echo "<p>Thank you! Your response was recorded.</p>";
+echo "<h2>✅ Thank you!</h2><p>Your response has been recorded.</p>";
+echo '<a href="main.php">Return to Main Menu</a>';
+
 ?>
