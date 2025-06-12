@@ -10,7 +10,7 @@ $name = htmlspecialchars($_SESSION['Name']);
 $isAdmin = $_SESSION['isAdmin'];
 
 $page = isset($_GET['page']) ? $_GET['page'] : null;
-$allowedPages = ['create_survey', 'select_survey', 'dashboard', 'take_survey', 'submit_response', 'save_survey'];
+$allowedPages = ['create_survey', 'select_survey', 'view_responses', 'take_survey', 'submit_response', 'save_survey'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +31,7 @@ $allowedPages = ['create_survey', 'select_survey', 'dashboard', 'take_survey', '
       <a href="main.php?page=create_survey">🛠️ Create Survey</a>
     <?php } ?>
     <a href="main.php?page=select_survey">📝 Take Survey</a>
-    <a href="main.php?page=dashboard">📄 View Responses</a>
+    <a href="main.php?page=view_responses">📄 View Responses</a>
     <a href="logout.php">🚪 Logout</a>
   </nav>
 
